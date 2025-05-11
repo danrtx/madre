@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from '@/components/Header';
 import AnimatedElements from '@/components/AnimatedElements';
 import MessageArea from '@/components/MessageArea';
@@ -6,7 +6,7 @@ import GallerySection from '@/components/GallerySection';
 import InteractiveHeart from '@/components/InteractiveHeart';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Heart } from 'lucide-react';
+import { Heart, Music } from 'lucide-react';
 
 interface HeartPosition {
   id: number;
@@ -19,6 +19,8 @@ const Index = () => {
   const [hearts, setHearts] = useState<HeartPosition[]>([]);
   const [clickCount, setClickCount] = useState(0);
   const { toast } = useToast();
+  const [showPlayer, setShowPlayer] = useState(false);
+  const audioRef = useRef(null);
   
   useEffect(() => {
     // Add a small delay for the entrance animation
@@ -26,6 +28,12 @@ const Index = () => {
       setIsLoaded(true);
     }, 300);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
+    }
   }, []);
 
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -129,6 +137,24 @@ const Index = () => {
         </svg>
         Volver
       </Button>
+
+      <audio
+        ref={audioRef}
+        src="/audio/cancion.mp3"
+        autoPlay
+        loop
+        controls
+        style={{
+          position: 'fixed',
+          top: 20,
+          right: 20,
+          zIndex: 100,
+          width: 220,
+          background: 'rgba(255,255,255,0.8)',
+          borderRadius: 8,
+          boxShadow: '0 2px 12px #0002'
+        }}
+      />
     </div>
   );
 };

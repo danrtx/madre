@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,13 @@ import AnimatedElements from '@/components/AnimatedElements';
 const Welcome = () => {
   const navigate = useNavigate();
   const [showTransition, setShowTransition] = useState(false);
+  const [showPlayer, setShowPlayer] = useState(false);
+  const audioRef = useRef(null);
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
+    }
+  }, []);
   
   const handleContinue = () => {
     setShowTransition(true);
@@ -48,6 +55,24 @@ const Welcome = () => {
           fill="#fda4af"
         />
       </div>
+
+      <audio
+        ref={audioRef}
+        src="/audio/cancion.mp3"
+        autoPlay
+        loop
+        controls
+        style={{
+          position: 'fixed',
+          top: 20,
+          right: 20,
+          zIndex: 100,
+          width: 220,
+          background: 'rgba(255,255,255,0.8)',
+          borderRadius: 8,
+          boxShadow: '0 2px 12px #0002'
+        }}
+      />
     </div>
   );
 };
